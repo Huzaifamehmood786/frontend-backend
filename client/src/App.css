@@ -1,0 +1,1356 @@
+/* ==========================================================================
+   Global Reset & Base
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ /* body {
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #f4f6f9;
+  color: #6366f1;
+  overflow-x: hidden;
+  height: 100vh;
+  
+}  */
+
+/* ==========================================================================
+   Auth Container (Login / Signup)
+   ========================================================================== */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #6366f1, #8b5cf6, #ec4899, #6366f1);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* floating blobs background */
+.auth-container::before,
+.auth-container::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  animation: floatBlob 8s ease-in-out infinite;
+}
+
+.auth-container::before {
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  left: -60px;
+}
+
+.auth-container::after {
+  width: 300px;
+  height: 300px;
+  bottom: -80px;
+  right: -80px;
+  animation-delay: 2s;
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -30px) scale(1.1); }
+}
+
+.auth-container form {
+  background: #ffffff;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px 32px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-container h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 8px;
+  animation: slideDown 0.5s ease 0.1s both;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  background: #f8fafc;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  animation: fadeInField 0.5s ease both;
+}
+
+.auth-container input:nth-of-type(1) { animation-delay: 0.15s; }
+.auth-container input:nth-of-type(2) { animation-delay: 0.25s; }
+.auth-container input:nth-of-type(3) { animation-delay: 0.35s; }
+
+@keyframes fadeInField {
+  from { opacity: 0; transform: translateX(-15px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.auth-container input:focus {
+  border-color: #6366f1;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  transform: scale(1.02);
+}
+
+.auth-container button {
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background-size: 200% auto;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  animation: fadeInField 0.5s ease 0.45s both;
+}
+
+.auth-container button:hover:not(:disabled) {
+  background-position: right center;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+}
+
+.auth-container button:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+}
+
+.auth-container button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  animation: pulseLoading 1.2s ease infinite;
+}
+
+@keyframes pulseLoading {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+}
+
+/* ripple effect on click */
+.auth-container button::after,
+.form button::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.auth-container button:focus:not(:active)::after,
+.form button:focus:not(:active)::after {
+  animation: ripple 0.5s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(25, 25);
+    opacity: 0;
+  }
+}
+
+.auth-container p {
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 6px;
+  animation: fadeInField 0.5s ease 0.55s both;
+}
+
+.auth-container p a {
+  color: #6366f1;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+}
+
+.auth-container p a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: #6366f1;
+  transition: width 0.25s ease;
+}
+
+.auth-container p a:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   Product Form
+   ========================================================================== */
+.form {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.form input {
+  padding: 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+}
+
+.form input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+  transform: scale(1.015);
+}
+
+.form button {
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.25s ease;
+}
+
+.form button[type="button"] {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.form button[type="button"]:hover {
+  background: #c7d2fe;
+  transform: translateY(-2px);
+}
+
+.form button[type="submit"] {
+  background: linear-gradient(135deg, #10b981, #059669);
+  background-size: 200% auto;
+  color: #fff;
+}
+
+.form button[type="submit"]:hover {
+  background-position: right center;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(16, 185, 129, 0.35);
+}
+
+.form button:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   Product Grid & Cards
+   ========================================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding-bottom: 16px;
+  opacity: 0;
+  transform: translateY(25px);
+  animation: cardEnter 0.5s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* stagger animation for multiple cards */
+.grid .card:nth-child(1) { animation-delay: 0.05s; }
+.grid .card:nth-child(2) { animation-delay: 0.1s; }
+.grid .card:nth-child(3) { animation-delay: 0.15s; }
+.grid .card:nth-child(4) { animation-delay: 0.2s; }
+.grid .card:nth-child(5) { animation-delay: 0.25s; }
+.grid .card:nth-child(6) { animation-delay: 0.3s; }
+.grid .card:nth-child(n+7) { animation-delay: 0.35s; }
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.16);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #f1f5f9;
+  transition: transform 0.4s ease;
+}
+
+.card:hover img {
+  transform: scale(1.08);
+}
+
+.card h3 {
+  margin: 14px 12px 6px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.card p {
+  color: #059669;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.card span {
+  display: inline-block;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin: 0 auto 12px;
+  width: fit-content;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.card:hover span {
+  background: #e0e7ff;
+  transform: scale(1.05);
+}
+
+.card button {
+  margin: 8px 16px 0;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #dc2626;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.card button:hover {
+  background: #dc2626;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.card button:active {
+  transform: scale(0.94);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 480px) {
+  .auth-container form {
+    padding: 30px 22px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+}
+/* ==========================================================================
+   Product Form - Full Animated Version
+   ========================================================================== */
+
+.form {
+  max-width: 480px;
+  margin: 50px auto;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  animation: formPopIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* subtle top accent bar */
+.form::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  background-size: 200% auto;
+  animation: barSlide 3s linear infinite;
+}
+
+@keyframes barSlide {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes formPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================================================
+   Inputs
+   ========================================================================== */
+.form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  background: #f8fafc;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  animation: fieldFadeIn 0.45s ease both;
+}
+
+.form input:nth-of-type(1) { animation-delay: 0.1s; }
+.form input:nth-of-type(2) { animation-delay: 0.18s; }
+.form input:nth-of-type(3) { animation-delay: 0.26s; }
+.form input:nth-of-type(4) { animation-delay: 0.34s; }
+
+@keyframes fieldFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.form input:focus {
+  border-color: #6366f1;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  transform: scale(1.015);
+}
+
+/* file input special styling */
+.form input[type="file"] {
+  padding: 10px;
+  cursor: pointer;
+  background: #f1f5f9;
+  border: 1.5px dashed #cbd5e1;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.form input[type="file"]:hover {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.form input[type="file"]::file-selector-button {
+  padding: 7px 14px;
+  margin-right: 12px;
+  border: none;
+  border-radius: 6px;
+  background: #6366f1;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.form input[type="file"]::file-selector-button:hover {
+  background: #4f46e5;
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.form button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s ease;
+  animation: fieldFadeIn 0.45s ease both;
+}
+
+.form button[type="button"] {
+  background: #e0e7ff;
+  color: #4338ca;
+  animation-delay: 0.42s;
+}
+
+.form button[type="button"]:hover {
+  background: #c7d2fe;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.25);
+}
+
+.form button[type="submit"] {
+  background: linear-gradient(135deg, #10b981, #059669);
+  background-size: 200% auto;
+  color: #fff;
+  animation-delay: 0.5s;
+}
+
+.form button[type="submit"]:hover {
+  background-position: right center;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.35);
+}
+
+.form button:active {
+  transform: scale(0.95);
+}
+
+/* click ripple effect */
+.form button::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  border-radius: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+.form button:focus:not(:active)::after {
+  animation: rippleEffect 0.5s ease-out;
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(30);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 480px) {
+  .form {
+    margin: 30px 16px;
+    padding: 24px 20px;
+  }
+}
+.add-product{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+  color: #6366f1;
+}
+.dashboard-title{
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 24px;
+  color: #6366f1;
+}
+.logout-btn{
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+    background: #e0e7ff;
+    color: #4338ca;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s ease;
+  animation: fieldFadeIn 0.45s ease both;
+}
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.dashboard-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 24px;
+  color: #6366f1;
+  margin-left: 93px;
+}
+.success-container {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background: #4cafef;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+:root {
+  --bg: #171310;
+  --surface: #211b16;
+  --surface-2: #2a2219;
+  --text: #f3ede4;
+  --muted: #b9ac9a;
+  --line: #3a3128;
+  --brass: #c9974b;
+  --brass-deep: #8b6b33;
+  --error: #d97757;
+  --success: #7fa585;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Checkout form ---------- */
+.checkout-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.checkout-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: translateY(18px);
+  animation: cardIn 0.6s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes cardIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.checkout-card h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.checkout-card .sub {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-bottom: 24px;
+}
+
+.payment-element-wrap {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-element-wrap:focus-within {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(201, 151, 75, 0.15);
+}
+
+.pay-button {
+  width: 100%;
+  background: var(--brass);
+  color: #1a1509;
+  border: none;
+  font-weight: 600;
+  font-size: 15.5px;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 10px 26px -10px rgba(201, 151, 75, 0.55);
+}
+
+.pay-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -10px rgba(201, 151, 75, 0.7);
+}
+
+.pay-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.pay-button.loading {
+  cursor: progress;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(26, 21, 9, 0.3);
+  border-top-color: #1a1509;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.secure-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 16px;
+}
+
+.error-banner {
+  background: rgba(217, 119, 87, 0.12);
+  border: 1px solid rgba(217, 119, 87, 0.4);
+  color: var(--error);
+  font-size: 13.5px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* ---------- Success page ---------- */
+.success-page {
+  /* min-height: 100vh; */
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: 'Inter', sans-serif;
+}
+
+.success-container {
+  text-align: center;
+  max-width: 420px;
+  margin: 1px 35%;
+
+}
+
+.check-circle {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 26px;
+}
+
+.check-circle svg { width: 100%; height: 100%; }
+
+.check-circle circle {
+  fill: none;
+  stroke: var(--success);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  animation: draw 0.6s ease forwards;
+}
+
+.check-circle path {
+  fill: none;
+  stroke: var(--success);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: draw 0.4s ease forwards 0.55s;
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+.success-container h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--text);
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: rise 0.6s ease forwards 0.8s;
+}
+
+.success-container h3 {
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  opacity: 0;
+  animation: rise 0.6s ease forwards 0.9s;
+}
+
+.success-container .amount {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  color: var(--brass);
+  margin: 14px 0 30px;
+  opacity: 0;
+  animation: rise 0.6s ease forwards 1s;
+}
+
+@keyframes rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-container button {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 13px 28px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  opacity: 0;
+  animation: rise 0.6s ease forwards 1.1s;
+}
+
+.success-container button:hover {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+/* ==========================================================================
+   Success Page — matches auth-container's gradient theme
+   ========================================================================== */
+.success-container {
+  /* min-height: 100vh; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #6366f1, #8b5cf6, #ec4899, #10b981);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+ margin-top: 150px;
+}
+
+/* floating blobs, same technique as .auth-container */
+.success-container::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  left: -60px;
+  animation: floatBlob 8s ease-in-out infinite;
+}
+
+.success-container::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  width: 300px;
+  height: 300px;
+  bottom: -80px;
+  right: -80px;
+  animation: floatBlob 8s ease-in-out infinite 2s;
+}
+
+.success-container h1 {
+  position: relative;
+  z-index: 1;
+  font-size: 34px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+  margin-bottom: 12px;
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.success-container h3 {
+  position: relative;
+  z-index: 1;
+  font-size: 17px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+  animation: fadeInField 0.5s ease 0.2s both;
+}
+
+.success-container p {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 24px;
+  border-radius: 999px;
+  margin: 6px 0 32px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  animation: fadeInField 0.5s ease 0.3s both;
+}
+
+.success-container button {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 14px 34px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  background-size: 200% auto;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.35);
+  transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  animation: fadeInField 0.5s ease 0.4s both;
+}
+
+.success-container button:hover {
+  background-position: right center;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(16, 185, 129, 0.45);
+}
+
+.success-container button:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* ripple effect, same technique as .form button */
+.success-container button::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  border-radius: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+.success-container button:focus:not(:active)::after {
+  animation: rippleEffect 0.5s ease-out;
+}
+
+@media (max-width: 480px) {
+  .success-container h1 { font-size: 26px; }
+  .success-container p { font-size: 17px; padding: 9px 18px; }
+  .success-container button { width: 100%; }
+}
+/* ==========================================================================
+   Payment Page — matches auth-container / success-container gradient theme
+   ========================================================================== */
+.payment-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #6366f1, #8b5cf6, #ec4899, #10b981);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+.payment-page::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  left: -60px;
+  animation: floatBlob 8s ease-in-out infinite;
+}
+
+.payment-page::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  width: 300px;
+  height: 300px;
+  bottom: -80px;
+  right: -80px;
+  animation: floatBlob 8s ease-in-out infinite 2s;
+}
+
+.payment-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 36px 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.payment-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 6px;
+  animation: slideDown 0.5s ease 0.1s both;
+}
+
+.payment-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+  animation: fadeInField 0.5s ease 0.2s both;
+}
+
+.payment-card > p {
+  display: inline-block;
+  font-size: 19px;
+  font-weight: 700;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 8px 20px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+  animation: fadeInField 0.5s ease 0.3s both;
+}
+
+.payment-card > div {
+  text-align: left;
+  animation: fadeInField 0.5s ease 0.4s both;
+}
+
+/* ---------- No product selected state ---------- */
+.no-product {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.no-product h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 20px;
+  animation: slideDown 0.5s ease 0.1s both;
+}
+
+.no-product button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: #e0e7ff;
+  color: #4338ca;
+  font-weight: 600;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  animation: fadeInField 0.5s ease 0.2s both;
+}
+
+.no-product button:hover {
+  background: #c7d2fe;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.25);
+}
+
+.no-product button:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 480px) {
+  .payment-card,
+  .no-product {
+    padding: 28px 22px;
+  }
+}
+/* ==========================================================================
+   Success Page — same structure/theme as payment-page / payment-card
+   ========================================================================== */
+.success-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #6366f1, #8b5cf6, #ec4899, #10b981);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+.success-page::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  left: -60px;
+  animation: floatBlob 8s ease-in-out infinite;
+}
+
+.success-page::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(10px);
+  width: 300px;
+  height: 300px;
+  bottom: -80px;
+  right: -80px;
+  animation: floatBlob 8s ease-in-out infinite 2s;
+}
+
+.success-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.success-card h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 10px;
+  animation: slideDown 0.5s ease 0.1s both;
+}
+
+.success-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+  animation: fadeInField 0.5s ease 0.2s both;
+}
+
+.success-card p {
+  display: inline-block;
+  font-size: 19px;
+  font-weight: 700;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 8px 20px;
+  border-radius: 999px;
+  margin-bottom: 28px;
+  animation: fadeInField 0.5s ease 0.3s both;
+}
+
+.success-card button {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  background-size: 200% auto;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(16, 185, 129, 0.3);
+  transition: background-position 0.4s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  animation: fadeInField 0.5s ease 0.4s both;
+}
+
+.success-card button:hover {
+  background-position: right center;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 26px rgba(16, 185, 129, 0.4);
+}
+
+.success-card button:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.success-card button::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  border-radius: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+.success-card button:focus:not(:active)::after {
+  animation: rippleEffect 0.5s ease-out;
+}
+
+@media (max-width: 480px) {
+  .success-card {
+    padding: 30px 22px;
+  }
+}
